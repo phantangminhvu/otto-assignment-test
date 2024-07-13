@@ -1,0 +1,4 @@
+export enum TODO_STATUS {
+  COMPLETED = 'COMPLETED',
+  IN_PROGRESS = 'IN PROGRESS'
+}
