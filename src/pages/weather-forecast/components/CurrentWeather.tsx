@@ -28,7 +28,10 @@ const CurrentWeather = ({
             </h6>
           </div>
           <div className='float-right ml-auto'>
-            <img src={currentWeather.imgIcon} alt={forecast.description} />
+            <img
+              src={currentWeather.imgIcon}
+              alt={currentWeather.description}
+            />
           </div>
         </div>
       </div>

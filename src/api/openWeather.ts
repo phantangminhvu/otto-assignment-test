@@ -15,24 +15,28 @@ export const searchCity = async (query: string) => {
     const { cachedResponse } = await request(
       `/api/get-cached-value?key=${searchCityKey}`
     )
-    if (cachedResponse) {
-      return JSON.parse(cachedResponse)
+    const parsedResponse = JSON.parse(cachedResponse)
+    if (parsedResponse && parsedResponse.length) {
+      return parsedResponse
     }
+
     const response = await request(
       `https://openweathermap.org/data/2.5/find?q=${query}&appid=${process.env.NEXT_PUBLIC_OPEN_WEATHER_API_ID}&units=metric`
     )
 
-    const searchCityResults = formatSearchCityData(response)
+    if (response) {
+      const searchCityResults = formatSearchCityData(response)
 
-    // store cache value for later usage
-    await request(`/api/store-cache-value`, {
-      method: 'POST',
-      body: {
-        value: JSON.stringify(searchCityResults),
-        key: searchCityKey
-      }
-    })
-    return searchCityResults
+      // store cache value for later usage
+      await request(`/api/store-cache-value`, {
+        method: 'POST',
+        body: {
+          value: JSON.stringify(searchCityResults),
+          key: searchCityKey
+        }
+      })
+      return searchCityResults
+    }
   } catch (error) {
     console.error('Error fetching the weather data', error)
   }
