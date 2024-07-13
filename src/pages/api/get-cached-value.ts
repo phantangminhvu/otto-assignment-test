@@ -14,7 +14,6 @@ export default async function handler(
   if (req.method === 'GET') {
     try {
       const data = await redis.get(key as string)
-      console.log('data', data)
       res.status(200).json({ cachedResponse: data })
     } catch (error) {
       res.status(500).json({ error: 'Error fetching data from Redis' })

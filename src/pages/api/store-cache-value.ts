@@ -7,7 +7,6 @@ export default async function handler(
 ) {
   if (req.method === 'POST') {
     const { key, value } = req.body
-    console.log('vvv', { key, value })
 
     if (!key || !value) {
       return res.status(400).json({ error: 'Key and value are required' })

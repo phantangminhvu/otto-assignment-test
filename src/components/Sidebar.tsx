@@ -9,9 +9,6 @@ const SideBar = ({
   isOpen: boolean
   toggle: () => void
 }) => {
-  const router = useRouter()
-  console.log('router', router.pathname)
-
   return (
     <div
       className={`sidebar ${isOpen ? 'show' : ''}`}
