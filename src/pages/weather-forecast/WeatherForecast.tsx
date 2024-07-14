@@ -5,6 +5,7 @@ import { SearchData, CurrentWeatherData, DailyForecastData } from './types'
 import DailyForecast from './components/DailyForecast'
 import CurrentWeather from './components/CurrentWeather'
 import SearchResults from './components/SearchResults'
+import Loader from '../../components/Loader'
 
 type WeatherForecastState = {
   searchingCity: string
@@ -13,6 +14,8 @@ type WeatherForecastState = {
   selectedCity: string | null
   selectedCountry: string | null
   weatherForecasts: DailyForecastData[]
+  loadingSearchCity: boolean
+  loadingGetWeather: boolean
 }
 
 const WeatherForecast = () => {
@@ -22,15 +25,22 @@ const WeatherForecast = () => {
     currentWeather: null,
     selectedCity: null,
     selectedCountry: null,
-    weatherForecasts: []
+    weatherForecasts: [],
+    loadingSearchCity: false,
+    loadingGetWeather: false
   })
 
   const onSearchCity = async () => {
     if (state.searchingCity !== '') {
+      setState((currentState) => ({
+        ...currentState,
+        loadingSearchCity: true
+      }))
       const cities = await searchCity(state.searchingCity)
       setState((currentState) => ({
         ...currentState,
-        searchResults: cities
+        searchResults: cities,
+        loadingSearchCity: false
       }))
     }
   }
@@ -42,6 +52,10 @@ const WeatherForecast = () => {
     country: string
   ) => {
     if (state.searchingCity !== '') {
+      setState((currentState) => ({
+        ...currentState,
+        loadingGetWeather: true
+      }))
       const response = await getWeather(lat, lon)
       if (response) {
         const { currentWeather, weatherForecasts } = response
@@ -51,7 +65,8 @@ const WeatherForecast = () => {
           selectedCountry: country,
           currentWeather,
           weatherForecasts,
-          searchResults: []
+          searchResults: [],
+          loadingGetWeather: false
         }))
       }
     }
@@ -70,7 +85,9 @@ const WeatherForecast = () => {
     currentWeather,
     selectedCity,
     selectedCountry,
-    weatherForecasts
+    weatherForecasts,
+    loadingSearchCity,
+    loadingGetWeather
   } = state
 
   return (
@@ -109,6 +126,12 @@ const WeatherForecast = () => {
                 )
               })}
             </div>
+          ) : loadingSearchCity ? (
+            <div
+              className={`dropdown-menu p-3 justify-content-center ${styles.menu}`}
+            >
+              <Loader />
+            </div>
           ) : (
             <></>
           )}
@@ -142,6 +165,10 @@ const WeatherForecast = () => {
                   </table>
                 </div>
               </div>
+            </div>
+          ) : loadingGetWeather ? (
+            <div className='p-3 justify-content-center'>
+              <Loader />
             </div>
           ) : (
             <></>
