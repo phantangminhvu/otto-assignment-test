@@ -18,7 +18,7 @@ npm run dev:dependencies
 Setting up .env.local
 
 ```
-NEXT_PUBLIC_OPEN_WHEATER_API: <Get API key from https://openweathermap.org/>
+NEXT_PUBLIC_OPEN_WEATHER_API_ID: <Get API key from https://openweathermap.org/>
 ```
 
 Setting up .env
